@@ -18,11 +18,12 @@ const Statistics = (props) => {
       <p>good    {props.good}</p>
       <p>neutral {props.neutral}</p>
       <p>bad     {props.bad}</p>
+      <p>all     {props.good + props.neutral + props.bad}</p>
+      <p>average {(props.good + props.neutral + props.bad)/3}</p>
+      <p>positive{(props.good*100)/(props.good + props.neutral + props.bad)} %</p>
     </div>
   )
 }
-
-
 
 
 function App() {
