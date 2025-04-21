@@ -11,7 +11,7 @@ const Buttons = () => {
   )
 }
 
-
+// Component with props
 const Statistics = (props) => {
   return (
     <div>
