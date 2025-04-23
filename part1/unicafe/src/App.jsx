@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react'
 
 const Buttons = () => {
@@ -11,20 +10,48 @@ const Buttons = () => {
   )
 }
 
-// Component with props
-const Statistics = (props) => {
-  return (
-    <div>
-      <p>good    {props.good}</p>
-      <p>neutral {props.neutral}</p>
-      <p>bad     {props.bad}</p>
-      <p>all     {props.good + props.neutral + props.bad}</p>
-      <p>average {(props.good + props.neutral + props.bad)/3}</p>
-      <p>positive{(props.good*100)/(props.good + props.neutral + props.bad)} %</p>
-    </div>
-  )
+const showStatistics = (props) => {
+  console.log(props.good)
+  console.log(props.neutral)
+  console.log(props.bad)
+  console.log("isStatistics", props.isStatistics)
+  console.log("======================== showStatistics ========================")
+  if (props.isStatistics) {
+    return (
+      <div>
+        <p>good    {props.good}</p>
+        <p>neutral {props.neutral}</p>
+        <p>bad     {props.bad}</p>
+        <p>all     {props.good + props.neutral + props.bad}</p>
+        <p>average {(props.good + props.neutral + props.bad)/3}</p>
+        <p>positive{(props.good*100)/(props.good + props.neutral + props.bad)} %</p>
+      </div>
+    )
+  } else {
+    return (
+      <div>
+        <p>No feedback given</p>
+      </div>
+    )
+  }
 }
 
+
+// Component with props
+const Statistics = (props) => {
+  const hasFeedback = props.good !== 0 || props.neutral !== 0 || props.bad !== 0;
+
+  return hasFeedback ? (
+    showStatistics({ 
+      good: props.good, 
+      neutral: props.neutral, 
+      bad: props.bad, 
+      isStatistics: true 
+    })
+  ) : (
+    showStatistics({ isStatistics: false })
+  );
+};
 
 function App() {
   const [good, setGood] = useState(0)
