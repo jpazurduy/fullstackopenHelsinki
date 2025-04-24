@@ -30,10 +30,15 @@ function App() {
   
   return (
     <div>
-      {anecdotes[selected]}     {votes[selected]}
+      {anecdotes[selected]}     {votes[selected]} votes
       <br/>
       <button onClick={() => {setSelected(Math.floor(Math.random() * anecdotes.length))}}>next anecdotes</button>
       <button onClick={() => {addVotes(selected)}}>vote</button>
+
+      <h3>Anecdote with more votes</h3>
+      {anecdotes[votes.indexOf(Math.max(...votes))]} {Math.max(...votes)} votes
+
+
     </div>
   )
 }
