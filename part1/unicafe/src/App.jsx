@@ -13,9 +13,7 @@ const Buttons = () => {
 
 export const StatisticLine = (props) => {
   return (
-    <div>
-       <p>{props.text}   {props.value}</p>
-    </div>
+    <div>{props.text}   {props.value}</div>
   )
 }
 
@@ -24,12 +22,34 @@ const showStatistics = (props) => {
   if (props.isStatistics) {
     return (
       <div>
-        <StatisticLine text="good" value={props.good}/>
-        <StatisticLine text="neutral" value={props.neutral}/>
-        <StatisticLine text="bad" value={props.bad}/>
-        <StatisticLine text="all" value={props.good + props.neutral + props.bad}/>  
-        <StatisticLine text="average" value={(props.good + props.neutral + props.bad)/3}/>
-        <StatisticLine text="positive" value={(props.good*100)/(props.good + props.neutral + props.bad) + " %"} />
+        <table>
+          <tbody>
+            <tr>
+              <td><StatisticLine text="good"/></td>
+              <td>{props.good}</td>
+            </tr>
+            <tr>
+              <td><StatisticLine text="neutral"/></td>
+              <td>{props.neutral}</td>
+            </tr>
+            <tr>
+              <td> <StatisticLine text="bad"/></td>
+              <td>{props.bad}</td>
+            </tr>
+            <tr>
+              <td><StatisticLine text="all"/></td>
+              <td>{props.good + props.neutral + props.bad}</td>
+            </tr>
+            <tr>
+              <td><StatisticLine text="average" /></td>
+              <td>{(props.good + props.neutral + props.bad)/3}</td>
+            </tr>
+            <tr>
+              <td><StatisticLine text="positive" /></td>
+              <td>{(props.good*100)/(props.good + props.neutral + props.bad) + " %"}</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     )
   } else {
