@@ -1,6 +1,44 @@
 import { useState } from 'react'
 
+const Search = (props) => {
+  return (
+    <div>
+        <h3>Phonebook Search</h3>
+        Search : <input value={props.searchTerm} onChange={props.addingSearchTerm}/>
+    </div>
+  )
+}
 
+const Form = (props) => {
+  return (
+    <div>
+      <h2>Phonebook</h2>
+      <form onSubmit={props.addData}>
+        <div>
+          name: <input value={props.newName} onChange={props.addingNewName}/>
+          
+        </div>
+        <div>
+        Number: <input value={props.newNumber} onChange={props.addingNewNumber}/>
+        </div>
+        <div>
+          <button type="submit">add</button>
+        </div>
+      </form>
+      <h2>Numbers</h2>
+    </div>
+  )
+}
+
+const ContactList = (props) => {
+  return (
+    <ul>
+        { props.showFilteredContacts.map((person, index) => (
+          <li key={index}>{person.name} {person.number}</li>
+        ))}
+    </ul>
+  )
+}
 
 function App() {
   const [persons, setPersons] = useState([
@@ -48,31 +86,18 @@ function App() {
 
   return (
     <div>
-    <div>
-        <h3>Phonebook Search</h3>
-        Search : <input value={searchTerm} onChange={addingSearchTerm}/>
-    </div>
-    
-      <h2>Phonebook</h2>
-      <form onSubmit={addData}>
-        <div>
-          name: <input value={newName} onChange={addingNewName}/>
-          
-        </div>
-        <div>
-        Number: <input value={newNumber} onChange={addingNewNumber}/>
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
-      <h2>Numbers</h2>
       
-      <ul>
-        {showFilteredContacts.map((person, index) => (
-          <li key={index}>{person.name} {person.number}</li>
-        ))}
-      </ul>
+      <Search searchTerm={searchTerm} addingSearchTerm={addingSearchTerm} />
+      
+      <Form
+        newName={newName}
+        newNumber={newNumber}
+        addingNewName={addingNewName}
+        addingNewNumber={addingNewNumber}
+        addData={addData}
+      />
+
+      <ContactList showFilteredContacts={showFilteredContacts} />
     </div>
   )
 }
