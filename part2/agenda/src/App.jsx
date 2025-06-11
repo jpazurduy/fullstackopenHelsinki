@@ -37,7 +37,10 @@ const ContactList = (props) => {
   return (
     <ul>
         { props.showFilteredContacts.map((person, index) => (
-          <li key={index}>{person.name} {person.number}</li>
+          <li key={index}>{person.name} {person.number} 
+          <button onClick={() => {props.deleteContact(person.id)}}> Delete </button></li>
+          
+        
         ))}
     </ul>
   )
@@ -91,6 +94,19 @@ function App() {
     setNewNumber("")
   }
 
+  const deleteContact = (id) => {
+    if (window.confirm("Are you sure you want to delete this contact?")) {
+      apiService
+        .delete(id)
+        .then(() => {
+          setPersons(persons.filter(person => person.id !== id))
+        })
+        .catch(error => {
+          console.error("Error deleting contact:", error)
+        })
+    }
+  }
+
   return (
     <div>
       
@@ -104,7 +120,7 @@ function App() {
         addData={addData}
       />
 
-      <ContactList showFilteredContacts={showFilteredContacts} />
+      <ContactList showFilteredContacts={showFilteredContacts} deleteContact={deleteContact} />
     </div>
   )
 }
