@@ -16,7 +16,7 @@ const Form = (props) => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <form onSubmit={props.addData}>
+      <form onSubmit={props.isAddOrUpdate ? props.addData : props.updateData}>
         <div>
           name: <input value={props.newName} onChange={props.addingNewName}/>
           
@@ -25,7 +25,7 @@ const Form = (props) => {
         Number: <input value={props.newNumber} onChange={props.addingNewNumber}/>
         </div>
         <div>
-          <button type="submit">add</button>
+          <button type="submit">{props.isAddOrUpdate ? "Add" : "Update"}</button>
         </div>
       </form>
       <h2>Numbers</h2>
@@ -38,9 +38,8 @@ const ContactList = (props) => {
     <ul>
         { props.showFilteredContacts.map((person, index) => (
           <li key={index}>{person.name} {person.number} 
-          <button onClick={() => {props.deleteContact(person.id)}}> Delete </button></li>
-          
-        
+          <button onClick={() => {props.deleteContact(person.id)}}> Delete </button>
+          <button onClick={() => {props.updateNumber(person.id)}}> Update </button></li>
         ))}
     </ul>
   )
@@ -51,6 +50,7 @@ function App() {
   const [newName, setNewName] = useState("")
   const [newNumber, setNewNumber] = useState("")
   const [searchTerm, setSearchTerm] = useState("")
+  const [isAddOrUpdate, setIsAddOrUpdate] = useState(true)
 
   useEffect(() => {
     console.log("useEffect called")
@@ -87,11 +87,40 @@ function App() {
       alert(`${newName} is already added to phonebook`)
       return
     }
-    setPersons(persons.concat({name: newName, number: newNumber, id: persons.length + 1}))
+
+    apiService
+      .create({name: newName, number: newNumber})
+      .then(person => { 
+        setPersons(persons.concat(person))
+      })
+
+    // setPersons(persons.concat({name: newName, number: newNumber, id: persons.length + 1}))
     alert(`${newName} added to phonebook`)
     
     setNewName("")
     setNewNumber("")
+  }
+
+  const updateData = (event) => {
+    event.preventDefault()
+    const personToUpdate = persons.find(person => person.name === newName)
+    if (!personToUpdate) {
+      alert(`${newName} is not found in phonebook`)
+      return
+    }
+    const updatedPerson = { ...personToUpdate, number: newNumber }
+    apiService
+      .update(personToUpdate.id, updatedPerson)
+      .then(updated => {
+        setPersons(persons.map(person => person.id !== personToUpdate.id ? person : updated))
+        alert(`${newName} updated in phonebook`)
+      })
+      .catch(error => {
+        console.error("Error updating contact:", error)
+      })
+    setNewName("")
+    setNewNumber("")
+    setIsAddOrUpdate(true)
   }
 
   const deleteContact = (id) => {
@@ -107,6 +136,13 @@ function App() {
     }
   }
 
+  const updateNumber = (id) => {
+    const personToUpdate = persons.find(person => person.id === id)
+    setNewName(personToUpdate.name)
+    setNewNumber(personToUpdate.number)
+    setIsAddOrUpdate(false)
+  }
+
   return (
     <div>
       
@@ -118,9 +154,11 @@ function App() {
         addingNewName={addingNewName}
         addingNewNumber={addingNewNumber}
         addData={addData}
+        updateData={updateData}
+        isAddOrUpdate={isAddOrUpdate}
       />
 
-      <ContactList showFilteredContacts={showFilteredContacts} deleteContact={deleteContact} />
+      <ContactList showFilteredContacts={showFilteredContacts} deleteContact={deleteContact} updateNumber={updateNumber} />
     </div>
   )
 }
