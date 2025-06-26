@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import apiService from './services/persons'
+import './index.css'
 
 const Search = (props) => {
   return (
@@ -45,12 +46,25 @@ const ContactList = (props) => {
   )
 }
 
+const Notification = ({ message }) => {
+  if (message === "") {
+    return null
+  }
+
+  return (
+    <div className="success">
+      {message}
+    </div>
+  )
+}
+
 function App() {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState("")
   const [newNumber, setNewNumber] = useState("")
   const [searchTerm, setSearchTerm] = useState("")
   const [isAddOrUpdate, setIsAddOrUpdate] = useState(true)
+  const [errorMessage, setErrorMessage] = useState('')
 
   useEffect(() => {
     console.log("useEffect called")
@@ -95,7 +109,11 @@ function App() {
       })
 
     // setPersons(persons.concat({name: newName, number: newNumber, id: persons.length + 1}))
-    alert(`${newName} added to phonebook`)
+    //alert(`${newName} added to phonebook`)
+    setErrorMessage("New contact added successfully")
+      setTimeout(() => {
+        setErrorMessage('')
+    }, 2000)
     
     setNewName("")
     setNewNumber("")
@@ -145,7 +163,7 @@ function App() {
 
   return (
     <div>
-      
+      <Notification message={errorMessage} />
       <Search searchTerm={searchTerm} addingSearchTerm={addingSearchTerm} />
       
       <Form
