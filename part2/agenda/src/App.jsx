@@ -59,7 +59,7 @@ const Notification = ({ message }) => {
 }
 
 function App() {
-  const [persons, setPersons] = useState([])
+  const [persons, setPersons] = useState()
   const [newName, setNewName] = useState("")
   const [newNumber, setNewNumber] = useState("")
   const [searchTerm, setSearchTerm] = useState("")
@@ -71,14 +71,15 @@ function App() {
     apiService
     .getAll()
     .then(persons => {
+      console.log(persons)
       setPersons(persons)
     })
     
   }, [])
   
-  const showFilteredContacts = persons.filter(person =>
+  const showFilteredContacts = persons != null ? persons.filter(person =>
     person.name.toLowerCase().includes(searchTerm.toLowerCase())
-  )
+  ) : []
   
   const addingNewName = (event) => {
     console.log(event.target.value)
